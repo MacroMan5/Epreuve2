@@ -1,0 +1,3 @@
+Créez un dossier "ssl" à côté du dossier "html". Générez un certificat SSL auto-signé (ou utilisez un certificat existant) et placez les fichiers du certificat dans ce dossier. Vous pouvez générer un certificat auto-signé en suivant ces instructions : https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs
+
+Créer un fichier de configuration Apache : Dans le dossier "ssl", créez un fichier nommé "default-ssl.conf". Ajoutez-y la configuration pour activer SSL et diriger les requêtes vers la page de connexion sécurisée. Remplacez "your_domain" par le nom de domaine que vous utiliserez pour accéder à la page de connexion.

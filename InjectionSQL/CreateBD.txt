@@ -1,0 +1,69 @@
+To create a database with authentication keys, we'll use MySQL as an example. You'll need to have MySQL installed on your system or use a MySQL container in Docker.
+
+Install MySQL Server: If you don't have MySQL Server installed on your system, follow the instructions in the official documentation to install it: https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/
+
+Create a new MySQL database and table for storing user information, including authentication keys. Connect to MySQL using the command line or a graphical client like MySQL Workbench, and run the following SQL commands:
+
+sql
+Copy code
+CREATE DATABASE ctf_db;
+
+USE ctf_db;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    auth_key VARCHAR(255) NOT NULL
+);
+This will create a new database called ctf_db and a table called users with columns for the user ID, username, password hash, and authentication key.
+
+To store user passwords securely, you should hash them using a strong hashing algorithm, such as bcrypt. Most programming languages have libraries for bcrypt, so choose the appropriate library for your preferred language.
+For example, in Python, you can use the bcrypt library:
+
+python
+Copy code
+import bcrypt
+
+password = "user_password"
+salt = bcrypt.gensalt()
+password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+Insert the ADMIN user and random users into the table. Here's an example of how to do this in Python, using the pymysql library to connect to MySQL and the Faker library to generate random Québécois names. Make sure to install the required libraries using pip install pymysql faker:
+python
+Copy code
+import pymysql
+import bcrypt
+from faker import Faker
+
+fake = Faker('fr_CA')  # Québécois name generator
+connection = pymysql.connect(host='localhost', user='your_mysql_user', password='your_mysql_password', database='ctf_db')
+
+try:
+    with connection.cursor() as cursor:
+        # Insert ADMIN user
+        admin_username = "admin"
+        admin_password = "admin_password"  # Use a strong password for the admin user
+        admin_salt = bcrypt.gensalt()
+        admin_password_hash = bcrypt.hashpw(admin_password.encode('utf-8'), admin_salt)
+        admin_auth_key = "admin_auth_key"  # Generate a secure auth key for the admin user
+
+        cursor.execute("INSERT INTO users (username, password_hash, auth_key) VALUES (%s, %s, %s)",
+                       (admin_username, admin_password_hash, admin_auth_key))
+
+        # Insert 50 random users
+        for _ in range(50):
+            random_username = fake.name()
+            random_password = fake.password(length=12, special_chars=True, digits=True, upper_case=True, lower_case=True)
+            random_salt = bcrypt.gensalt()
+            random_password_hash = bcrypt.hashpw(random_password.encode('utf-8'), random_salt)
+            random_auth_key = fake.uuid4()
+
+            cursor.execute("INSERT INTO users (username, password_hash, auth_key) VALUES (%s, %s, %s)",
+                           (random_username, random_password_hash, random_auth_key))
+
+    connection.commit()
+finally:
+    connection.close()
+Replace 'your_mysql_user', 'your_mysql_password', and 'admin_password' with the appropriate values for your MySQL server and desired admin user password. This script will create an ADMIN user with a specified password and 50 random users with unique passwords and authentication keys.
+
+Implement server-side authentication for the login page by checking the
