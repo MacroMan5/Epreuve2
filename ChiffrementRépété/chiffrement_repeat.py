@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 import base64
 
-message_clair = "01253{b@se64_l00ps_4re_fun} Félicitations ! Vous avez déchiffré le message. La prochaine étape consiste à vous connecter à cette page web ..........  Une fois sur cette page, votre mission sera de vous connecter en tant qu'administrateur et de trouver un fichier contenant les informations sur un serveur. Ensuite, accédez à ce serveur et trouvez les fichiers top secrets. Bonne chance !"
+message_clair = "01253{b@se64_l00ps_4re_fun} 0x55 : Cela vous aidera pour la prochaine épreuvre. "
 
 # Fonction pour encoder un message en base64 plusieurs fois
 def encode_repeatedly(message, num_repetitions):
